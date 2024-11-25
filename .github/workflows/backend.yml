@@ -33,6 +33,9 @@ jobs:
         echo "DB_NAME=${{ secrets.DB_NAME }}" >> backend/.env
         echo "PORT=${{ secrets.PORT }}" >> backend/.env
 
+    - name: Verify .env file contents
+      run: cat backend/.env
+      
     - name: Cache node_modules  # Caching odvisnosti
       uses: actions/cache@v3
       with:
