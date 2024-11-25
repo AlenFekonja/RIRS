@@ -115,6 +115,8 @@ const RegisterForm = () => {
           onChange={handleChange}
           error={!!errors.name}
           helperText={errors.name}
+           data-testid="name-input"
+           required
         />
         <TextField
           label="Last name"
@@ -126,6 +128,8 @@ const RegisterForm = () => {
           onChange={handleChange}
           error={!!errors.lastName}
           helperText={errors.lastName}
+           data-testid="lastName-input"
+           required
         />
         <TextField
           label="Email"
@@ -138,6 +142,8 @@ const RegisterForm = () => {
           onChange={handleChange}
           error={!!errors.email}
           helperText={errors.email}
+           data-testid="email-input"
+           required
         />
         <TextField
           label="Password"
@@ -150,6 +156,8 @@ const RegisterForm = () => {
           onChange={handleChange}
           error={!!errors.password}
           helperText={errors.password}
+           data-testid="password-input"
+           required
         />
         <TextField
           label="Confirm Password"
@@ -162,6 +170,8 @@ const RegisterForm = () => {
           onChange={handleChange}
           error={!!errors.confirmPassword}
           helperText={errors.confirmPassword}
+           data-testid="confirmPassword-input"
+           required
         />
         <Button
           type="submit"
