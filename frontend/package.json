@@ -32,7 +32,6 @@
     "test:ci": "npm test -- --coverage --watchAll=false",
     "eject": "react-scripts eject"
   },
-  "type": "module",
   "jest": {
     "transform": {
       "^.+\\.js$": "babel-jest"
