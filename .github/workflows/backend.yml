@@ -14,6 +14,7 @@ jobs:
   # Job za gradnjo backenda
   build-backend:
     runs-on: ubuntu-latest
+    environment: .env
 
     steps:
     - name: Checkout code  # Kloniranje repozitorija
