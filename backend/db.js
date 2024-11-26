@@ -20,4 +20,17 @@ const db = mysql.createConnection({
         }
     });
 
+    afterAll((done) => {
+        // Properly close the MySQL connection
+        db.end((err) => {
+            if (err) {
+                console.error('Error closing the MySQL connection:', err);
+                done(err);
+            } else {
+                console.log('MySQL connection closed');
+                done();
+            }
+        });
+    });
+
 module.exports = db;
