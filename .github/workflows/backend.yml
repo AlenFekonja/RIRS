@@ -16,6 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: .env
 
+    env:  # Define global environment variables for the job
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      PORT: ${{ secrets.PORT }}
+
     steps:
     - name: Checkout code  # Kloniranje repozitorija
       uses: actions/checkout@v3
@@ -67,6 +74,13 @@ jobs:
     needs: build-backend  # Testiranje se izvede po uspešni gradnji
     runs-on: ubuntu-latest
 
+    env:  # Define global environment variables for the job
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      PORT: ${{ secrets.PORT }}    
+
     steps:
     - name: Checkout code  # Kloniranje repozitorija
       uses: actions/checkout@v3
@@ -83,7 +97,7 @@ jobs:
         echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> backend/.env
         echo "DB_NAME=${{ secrets.DB_NAME }}" >> backend/.env
         echo "PORT=${{ secrets.PORT }}" >> backend/.env
-        
+
     - name: Verify .env file contents
       run: cat backend/.env
 
