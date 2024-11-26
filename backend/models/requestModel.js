@@ -54,6 +54,11 @@ GROUP BY
     db.query(query, [stanje, id], callback);
   },
 
+  updateComment: (id, comment, callback) => {
+    const query = `UPDATE zahteva SET komentar = ? WHERE id = ?`;
+    db.query(query, [comment, id], callback);
+  },
+
   create: (requestData, callback) => {
     const query = `INSERT INTO zahteva (komentar, uporabnik_id, datum_zahteve, stanje) VALUES (?, ?, ?, ?)`;
     db.query(

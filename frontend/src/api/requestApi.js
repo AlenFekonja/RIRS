@@ -22,6 +22,17 @@ export const updateRequestStatus = async (id, status) => {
   }
 };
 
+export const updateRequestComment = async (id, comment) => {
+  try {
+    const response = await axios.put(`${API_URL+"/comment"}`, { id, comment });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating request comment:", error);
+    return null;
+  }
+};
+
+ 
 export const submitLeaveRequest = async (dopusti) => {
   try {
     const token = localStorage.getItem("token");
