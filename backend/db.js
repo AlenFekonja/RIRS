@@ -11,26 +11,12 @@ const db = mysql.createConnection({
     port: process.env.PORT,   
 });
 
-/// just write a test here 
     db.connect((err) => {
         if (err) {
             console.error('Database connection failed:', err.message);
         } else {
             console.log('Connected to MySQL database');
         }
-    });
-
-    afterAll((done) => {
-        // Properly close the MySQL connection
-        db.end((err) => {
-            if (err) {
-                console.error('Error closing the MySQL connection:', err);
-                done(err);
-            } else {
-                console.log('MySQL connection closed');
-                done();
-            }
-        });
     });
 
 module.exports = db;

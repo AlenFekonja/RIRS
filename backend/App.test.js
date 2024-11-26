@@ -112,4 +112,20 @@ test('should retrieve leave statistics by user', async () => {
     expect(response.body[0]).toHaveProperty('priimek');
     expect(response.body[0]).toHaveProperty('odobreniDopusti');
 });
+const db = require('./db');
+
+afterAll((done) => {
+
+    db.end((err) => {
+        if (err) {
+            console.error('Error closing the MySQL connection:', err);
+            done(err);
+        } else {
+            console.log('MySQL connection closed');
+            done();
+        }
+    });
+
+});
+
 
