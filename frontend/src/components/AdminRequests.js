@@ -18,7 +18,7 @@ import {
 import { getAllGroupedRequests, updateRequestStatus, updateRequestComment } from '../api/requestApi';
 
 const AdminRequests = () => {
-    const [requests, setRequests] = useState([]);
+    const [requests, setRequests] = useState( []);
     const [open, setOpen] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [editingComments, setEditingComments] = useState({});
@@ -111,6 +111,7 @@ const AdminRequests = () => {
                                         onChange={(e) =>
                                             handleCommentChange(request.id, e.target.value)
                                         }
+                                         data-testid="comment-input"
                                     />
                                     <Button
                                         variant="contained"
@@ -118,6 +119,9 @@ const AdminRequests = () => {
                                         size="small"
                                         style={{ marginTop: '8px' }}
                                         onClick={() => handleSaveComment(request)}
+                                         data-testid="comment-button"
+                                         role='button'
+                                         aria-label="save comment"
                                     >
                                         Save Comment
                                     </Button><br></br>

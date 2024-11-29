@@ -1,12 +1,13 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor,within  } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import AdminPrivileges from './components/AdminPrivileges';
 import RegisterForm from './components/RegisterForm';
 import { getUsers, toggleAdmin } from './api/userApi';
 import Footer from './components/Footer/Footer';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import AdminRequests from './components/AdminRequests';
 import { MemoryRouter } from 'react-router-dom';
+import { getAllGroupedRequests, updateRequestComment } from './api/requestApi';
 jest.mock('./api/userApi', () => ({
   getUsers: jest.fn(),
   toggleAdmin: jest.fn(),
@@ -17,6 +18,7 @@ jest.mock('./api/userApi', () => ({
 jest.mock('./api/requestApi', () => ({
   getAllGroupedRequests: jest.fn(),
   updateRequestStatus: jest.fn(),
+  updateRequestComment: jest.fn(),
 }));
 
 describe('AdminPrivileges Component', () => {
@@ -66,16 +68,15 @@ test("renders footer with the expected background color", () => {
     </MemoryRouter>
   );
 
-  const footer = screen.getByRole('contentinfo'); 
+  const footer = screen.getByRole('contentinfo');
   expect(footer).toBeInTheDocument();
   const computedStyle = window.getComputedStyle(footer);
 
-  expect(computedStyle.backgroundColor).toBe('rgb(51, 102, 204)'); 
+  expect(computedStyle.backgroundColor).toBe('rgb(51, 102, 204)');
 });
 import App from './App';
 
 test('navigates to /register and renders the RegisterPage component', () => {
-  // Simulate navigation to /register
   window.history.pushState({}, 'Register Page', '/register');
 
   render(<App />);
@@ -95,9 +96,9 @@ const sampleLeaves = [
 test("sorts the table rows by type of leave", () => {
   render(<LeavesTable leaves={sampleLeaves} />);
 
-  const sortBySelect = screen.getByRole("combobox"); 
+  const sortBySelect = screen.getByRole("combobox");
   fireEvent.mouseDown(sortBySelect);
-  fireEvent.click(screen.getByText("Type of Leave")); 
+  fireEvent.click(screen.getByText("Type of Leave"));
 
   const rows = screen.getAllByRole("row").slice(1);
 
@@ -111,7 +112,7 @@ test("sorts the table rows by type of leave", () => {
 });
 
 test("Footer is visible", async () => {
-  const { container } = render(    <MemoryRouter>
+  const { container } = render(<MemoryRouter>
     <ThemeProvider theme={createTheme()}>
       <Footer />
     </ThemeProvider>
@@ -146,4 +147,130 @@ test("should have required fields", () => {
   expect(emailField).toBeRequired();
   expect(passwordField).toBeRequired();
   expect(confirmPasswordField).toBeRequired();
+});
+
+const request = {
+  id: 1,
+  datum_zahteve: '2024-11-25',
+  komentar: 'Test comment',
+};
+
+
+
+
+
+
+const dummyRequests = [
+  {
+    id: 1,
+    email: 'john.doe@example.com',
+    datum_zahteve: new Date().toISOString(),
+    stanje: 'in progress',
+    komentar: 'Updated Comment',
+    dopusti: [
+      {
+        tip_dopusta: 'Annual Leave',
+        zacetek: '2024-12-01',
+        konec: '2024-12-10',
+        razlog: 'Vacation',
+      },
+    ],
+  },
+];
+
+describe('AdminRequests Component', () => {
+  it('should render requests comment input field correctly', async () => {
+
+
+    getAllGroupedRequests.mockResolvedValue(dummyRequests);
+
+    render(<AdminRequests />);
+
+    await waitFor(() => expect(screen.getByTestId('comment-input')).toBeInTheDocument());
+
+  });
+});
+
+
+test('should check if input field is enabled and writable', async () => {
+
+
+  getAllGroupedRequests.mockResolvedValue(dummyRequests);
+
+  render(<AdminRequests />);
+
+  await waitFor(() => {
+    const commentInput = screen.getByTestId('comment-input');
+    expect(commentInput).toBeEnabled();
+  });
+
+
+});
+
+test('should check if save comment button is enabled and clickable', async () => {
+
+
+  getAllGroupedRequests.mockResolvedValue(dummyRequests);
+
+  render(<AdminRequests />);
+
+  await waitFor(() => {
+    const saveButton = screen.getByTestId('comment-button');
+    expect(saveButton).toBeEnabled();
+  });
+
+});
+test('Check if comment input vield is writable', async () => {
+  getAllGroupedRequests.mockResolvedValue(dummyRequests);
+  render(<AdminRequests />);
+
+  await waitFor(() => {
+    const saveButton = screen.getByTestId('comment-button');
+    expect(saveButton).toBeEnabled();
+
+    const commentInput = screen.getByTestId('comment-input');
+    expect(commentInput).toBeEnabled();
+  });
+  const commentInput = screen.getByTestId('comment-input').querySelector('textarea');
+  const saveButton = screen.getByTestId('comment-button');
+
+  fireEvent.change(commentInput, { target: { value: 'Updated Comment' } });
+  expect(saveButton).toBeEnabled();
+  fireEvent.click(saveButton);
+  expect(commentInput.value).toBe('Updated Comment');
+
+});
+
+it('should call handleSaveComment with correct request data when save button is clicked', async () => {
+  const dummyRequests = [
+    {
+      id: 1,
+      email: 'user@example.com',
+      datum_zahteve: '2023-11-25',
+      komentar: 'Initial Comment',
+      stanje: 'in progress',
+      dopusti: [],
+    },
+  ];
+
+  getAllGroupedRequests.mockResolvedValue(dummyRequests);
+  updateRequestComment.mockResolvedValue({ success: true });
+
+  render(<AdminRequests />);
+
+  await waitFor(() => {
+    const saveButton = screen.getByTestId('comment-button');
+    expect(saveButton).toBeInTheDocument();
+    expect(saveButton).toBeEnabled();
+  });
+
+  const commentInput = screen.getByTestId('comment-input').querySelector('textarea');
+  fireEvent.change(commentInput, { target: { value: 'Updated Comment' } });
+
+  const saveButton = screen.getByTestId('comment-button');
+  fireEvent.click(saveButton);
+
+  await waitFor(() => {
+    expect(updateRequestComment).toHaveBeenCalledWith(1, 'Updated Comment');
+  });
 });
