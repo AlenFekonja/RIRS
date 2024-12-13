@@ -183,10 +183,10 @@ jobs:
         cd backend
         npm ci
 
-    - name: Collect coverage (React-specific)
+    - name: Run tests with coverage (Node.js Express specific)
       run: |
         cd backend
-        npm run test:ci -- --coverage
+        npm run test
       env:
         CI: true
 
