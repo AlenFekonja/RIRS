@@ -186,7 +186,7 @@ jobs:
     - name: Run tests with coverage (Node.js Express specific)
       run: |
         cd backend
-        npm run test
+        npm run test:ci
       env:
         CI: true
 
