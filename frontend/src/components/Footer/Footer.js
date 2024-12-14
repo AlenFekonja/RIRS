@@ -5,9 +5,11 @@ import { AppBar, Toolbar, Typography, Button, Container } from "@mui/material";
 const Footer = () => {
   return (
     <AppBar
+      className="footer"
       position="static"
       color="primary"
-      sx={{ padding: "20px 0", marginTop: "75px" }}
+      sx={{ padding: "20px 0", marginTop: "75px", backgroundColor: "#3366cc" }}
+      role="contentinfo"
     >
       <Container maxWidth="md">
         <Toolbar sx={{ justifyContent: "center" }}>

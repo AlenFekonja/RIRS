@@ -17,7 +17,6 @@ exports.updateRequestStatus = (req, res) => {
       .status(400)
       .json({ message: "Request ID and status are required" });
   }
-
   Request.update(id, status, (err, result) => {
     if (err) {
       return res
@@ -30,6 +29,30 @@ exports.updateRequestStatus = (req, res) => {
     }
 
     res.status(200).json({ message: "Request status updated successfully" });
+  });
+};
+
+exports.updateRequestComment = (req, res) => {
+  const { id, comment } = req.body;
+
+  if (!id || !comment) {
+    return res
+      .status(400)
+      .json({ message: "Request ID and comment are required" });
+  }
+
+  Request.updateComment(id, comment, (err, result) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: "Failed to update request comment" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    res.status(200).json({ message: "Request comment updated successfully" });
   });
 };
 

@@ -5,7 +5,6 @@ import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHea
 const AdminPrivileges = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -33,10 +32,6 @@ const AdminPrivileges = () => {
 
     if (loading) {
         return <CircularProgress />;
-    }
-
-    if (error) {
-        return <div>Error loading users: {error}</div>;
     }
 
     return (
