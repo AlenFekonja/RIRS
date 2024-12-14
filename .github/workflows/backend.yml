@@ -163,7 +163,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Development      
-    if: github.ref == 'refs/heads/main' 
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
