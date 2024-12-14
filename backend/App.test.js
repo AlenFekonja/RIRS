@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 const mysql = require('mysql2');
 
 dotenv.config();
-//test
+//test2
 test('should have all required environment variables defined', () => {
     const requiredEnvVars = [
         'DB_HOST',
